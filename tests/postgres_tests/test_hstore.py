@@ -322,7 +322,7 @@ class TestSerialization(PostgreSQLSimpleTestCase):
         )
 
     def test_dumping(self):
-        instance = HStoreModel(field=self.test_field1, 
+        instance = HStoreModel(field=self.test_field1,
                                array_field=[self.array_field1, self.array_field2])
         data = serializers.serialize("json", [instance])
         self.assertEqual(json.loads(data), json.loads(self.test_data))
