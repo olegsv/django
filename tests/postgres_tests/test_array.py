@@ -1008,6 +1008,33 @@ class TestSerialization(PostgreSQLSimpleTestCase):
         self.assertEqual(instance.field, [1, 2, None])
 
 
+class TestStringSerialization(PostgreSQLSimpleTestCase):
+    test_data = (
+        '[{"fields": {"field": "[\\"Django\\", \\"Python\\", null]"}, '
+        '"model": "postgres_tests.chararraymodel", "pk": null}]'
+    )
+
+    values = ["Django", "Python", None]
+
+    def test_encode(self):
+        instance = CharArrayModel(field=self.values)
+        data = serializers.serialize("json", [instance])
+        self.assertEqual(json.loads(data), json.loads(self.test_data))
+
+    def test_decode(self):
+        instance = list(serializers.deserialize("json", self.test_data))[0].object
+        self.assertEqual(instance.field, self.values)
+
+
+class TestUnicodeStringSerialization(TestStringSerialization):
+    test_data = (
+        '[{"fields": {"field": "[\\"Джанго\\", \\"פייתון\\", null, \\"król\\"]"}, '
+        '"model": "postgres_tests.chararraymodel", "pk": null}]'
+    )
+
+    values = ["Джанго", "פייתון", None, "król"]
+
+
 class TestValidation(PostgreSQLSimpleTestCase):
     def test_unbounded(self):
         field = ArrayField(models.IntegerField())
