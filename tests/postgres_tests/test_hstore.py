@@ -314,8 +314,8 @@ class TestSerialization(PostgreSQLSimpleTestCase):
                             [
                                 json.dumps(self.array_field1, ensure_ascii=False),
                                 json.dumps(self.array_field2, ensure_ascii=False),
-                            ], 
-                            ensure_ascii=False
+                            ],
+                            ensure_ascii=False,
                         ),
                     },
                 }
